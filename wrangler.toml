@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "travel-blog-db"
-database_id = "YOUR_DATABASE_ID" # Replace after running: npx wrangler d1 create travel-blog-db
+database_id = "f06806b0-942e-43ba-8899-74cb72f016ab" # Replace after running: npx wrangler d1 create travel-blog-db
 
 # R2 Bucket for photo uploads
 [[r2_buckets]]

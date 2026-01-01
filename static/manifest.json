@@ -1,0 +1,32 @@
+{
+	"name": "Travel Blog",
+	"short_name": "TravelBlog",
+	"description": "Adventures Around the World - A Travel Blog",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#ffffff",
+	"theme_color": "#667eea",
+	"orientation": "portrait-primary",
+	"icons": [
+		{
+			"src": "/icons/icon-192x192.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "any"
+		}
+	],
+	"categories": ["travel", "blog", "lifestyle"],
+	"screenshots": [],
+	"shortcuts": [
+		{
+			"name": "Search",
+			"url": "/search",
+			"description": "Search blog posts"
+		},
+		{
+			"name": "Photos",
+			"url": "/photos",
+			"description": "View photo gallery"
+		}
+	]
+}

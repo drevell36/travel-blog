@@ -68,7 +68,8 @@ export const actions: Actions = {
 				await db.addTagToPost(postId, tagId);
 			}
 		} catch (err) {
-			return fail(500, { error: 'Failed to create post' });
+			console.error('Failed to create post:', err);
+			return fail(500, { error: 'Failed to create post: ' + (err instanceof Error ? err.message : String(err)) });
 		}
 
 		throw redirect(302, '/admin/posts');

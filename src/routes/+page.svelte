@@ -4,7 +4,6 @@
 
 <svelte:head>
 	<title>Travel Blog - Adventures Around the World</title>
-	<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
 </svelte:head>
 
 <div class="hero">

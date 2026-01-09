@@ -384,6 +384,13 @@
 		overflow-y: auto;
 		z-index: 1001;
 		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+		color: var(--text, #333);
+	}
+	
+	:global(.dark) .modal {
+		background: #1e293b;
+		color: #f1f5f9;
+		border: 1px solid #475569;
 	}
 	
 	.modal-header {
@@ -421,6 +428,10 @@
 		color: var(--text-muted, #666);
 		font-size: 0.875rem;
 		margin-bottom: 1rem;
+	}
+	
+	:global(.dark) .hint {
+		color: #94a3b8;
 	}
 	
 	.upload-area {
@@ -507,6 +518,11 @@
 		border-radius: 8px;
 	}
 	
+	:global(.dark) .progress-section {
+		background: #0f172a;
+		border-color: #475569;
+	}
+	
 	.progress-bar {
 		height: 12px;
 		background: var(--border, #ddd);
@@ -528,6 +544,10 @@
 		margin-top: 0.5rem;
 	}
 	
+	:global(.dark) .progress-text {
+		color: #94a3b8;
+	}
+	
 	.result-section {
 		margin-top: 1rem;
 	}
@@ -536,6 +556,7 @@
 		display: block;
 		font-weight: 500;
 		margin-bottom: 0.5rem;
+		color: var(--text, #333);
 	}
 	
 	.result-section textarea {
@@ -547,8 +568,18 @@
 		font-size: 0.9rem;
 		line-height: 1.5;
 		resize: vertical;
-		background: var(--background, #fff);
+		background: var(--input-bg, var(--card, #fff));
 		color: var(--text, #333);
+	}
+	
+	:global(.dark) .result-section textarea {
+		background: #1e293b;
+		color: #f1f5f9;
+		border-color: #475569;
+	}
+	
+	:global(.dark) .result-section label {
+		color: #f1f5f9;
 	}
 	
 	.modal-footer {

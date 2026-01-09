@@ -1,6 +1,10 @@
 /// <reference types="@cloudflare/workers-types" />
-import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
+
+// Use crypto.randomUUID() which is available in Cloudflare Workers
+function uuidv4(): string {
+	return crypto.randomUUID();
+}
 
 // Types
 export interface Post {
@@ -234,7 +238,15 @@ export class Database {
 		price_range?: number;
 	}) {
 		const id = uuidv4();
-		const slug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+		let baseSlug = data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+		
+		// Check if slug exists and add suffix if needed
+		let slug = baseSlug;
+		let counter = 1;
+		while (await this.db.prepare('SELECT id FROM posts WHERE slug = ?').bind(slug).first()) {
+			slug = `${baseSlug}-${counter}`;
+			counter++;
+		}
 		const status = data.status || (data.published ? 'published' : 'draft');
 		
 		await this.db.prepare(`

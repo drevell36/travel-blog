@@ -6,7 +6,8 @@ declare global {
 		interface Locals {
 			user?: {
 				id: string;
-				username: string;
+				username?: string;
+				email?: string;
 			};
 		}
 		// interface PageData {}
@@ -16,6 +17,7 @@ declare global {
 				DB: D1Database;
 				PHOTOS: R2Bucket;
 				AI?: Ai;
+				GOOGLE_VISION_API_KEY?: string;
 			};
 			context: {
 				waitUntil(promise: Promise<unknown>): void;

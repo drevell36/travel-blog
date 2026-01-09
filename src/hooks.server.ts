@@ -1,5 +1,6 @@
 import type { Handle } from '@sveltejs/kit';
 import { getDatabase } from '$lib/server/db';
+import { getSupabaseServer } from '$lib/server/supabase';
 
 // Simple in-memory rate limiter
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -7,6 +8,13 @@ const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 function isRateLimited(key: string, limit: number, windowMs: number): boolean {
 	const now = Date.now();
 	const record = rateLimitMap.get(key);
+	
+	// Clean up old entries lazily (Cloudflare Workers don't support setInterval in global scope)
+	for (const [k, v] of rateLimitMap.entries()) {
+		if (now > v.resetTime) {
+			rateLimitMap.delete(k);
+		}
+	}
 	
 	if (!record || now > record.resetTime) {
 		rateLimitMap.set(key, { count: 1, resetTime: now + windowMs });
@@ -16,16 +24,6 @@ function isRateLimited(key: string, limit: number, windowMs: number): boolean {
 	record.count++;
 	return record.count > limit;
 }
-
-// Clean up old entries periodically
-setInterval(() => {
-	const now = Date.now();
-	for (const [key, value] of rateLimitMap.entries()) {
-		if (now > value.resetTime) {
-			rateLimitMap.delete(key);
-		}
-	}
-}, 60000); // Clean every minute
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const clientIP = event.request.headers.get('cf-connecting-ip') || 
@@ -56,21 +54,20 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	}
 
-	const sessionId = event.cookies.get('session');
+	// Authenticate with Supabase
+	try {
+		const supabase = getSupabaseServer(event);
+		const { data: { user }, error } = await supabase.auth.getUser();
 
-	if (sessionId && event.platform?.env?.DB) {
-		try {
-			const db = getDatabase(event.platform);
-			const session = await db.getSession(sessionId);
-			if (session) {
-				event.locals.user = {
-					id: session.user_id,
-					username: session.username
-				};
-			}
-		} catch (e) {
-			console.error('Session check failed:', e);
+		if (user && !error) {
+			event.locals.user = {
+				id: user.id,
+				username: user.user_metadata?.username || user.email || 'user',
+				email: user.email
+			};
 		}
+	} catch (e) {
+		console.error('Auth check failed:', e);
 	}
 
 	const response = await resolve(event);

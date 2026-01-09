@@ -3,6 +3,6 @@ import { getDatabase } from '$lib/server/db';
 
 export const load: PageServerLoad = async ({ platform }) => {
 	const db = getDatabase(platform);
-	const posts = await db.getAllPosts(true);
+	const posts = await db.getAllPosts({ includeUnpublished: true });
 	return { posts };
 };

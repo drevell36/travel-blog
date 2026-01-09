@@ -120,12 +120,13 @@
 						</div>
 					{/if}
 				</div>
-				<a href="/rss.xml" title="RSS Feed">📰</a>
 				{#if data.user}
 					<a href="/admin">Dashboard</a>
 					<form method="POST" action="/logout" style="display: inline;">
 						<button type="submit" class="logout-btn">Logout</button>
 					</form>
+				{:else}
+					<a href="/login" class="login-btn">Login</a>
 				{/if}
 				<button class="theme-toggle" onclick={toggleDarkMode} aria-label="Toggle dark mode">
 					{#if darkMode}
